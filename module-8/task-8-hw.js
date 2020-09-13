@@ -23,22 +23,20 @@ document.addEventListener("DOMContentLoaded", () => {
   const lightboxRef = document.querySelector(".lightbox");
   const buttonRef = lightboxRef.querySelector(".lightbox__button");
   const lightboxImg = lightboxRef.querySelector(".lightbox__image");
-
   const lightboxOverlay = lightboxRef.querySelector(".lightbox__overlay");
-  // let myTarget = 0;
+
   let activeSlide;
-  const openModal = (event) => {
-    if (event.target.classList.contains("gallery__image")) {
+  const openModal = ({ target }) => {
+    if (target.classList.contains("gallery__image")) {
       event.preventDefault();
-      lightboxImg.src = event.target.dataset.source;
-      lightboxImg.alt = event.target.alt;
+      lightboxImg.src = target.dataset.source;
+      lightboxImg.alt = target.alt;
       lightboxRef.classList.add("is-open");
       lightboxOverlay.classList.add("is-open");
       document.addEventListener("keydown", EcsModal);
-      // document.addEventListener("keydown", Nextimg);
       document.addEventListener("keydown", moveRight);
       document.addEventListener("keydown", moveLeft);
-      activeSlide = event.target.dataset.index;
+      activeSlide = target.dataset.index;
     }
   };
   console.log(galleryHtml);
@@ -57,8 +55,7 @@ document.addEventListener("DOMContentLoaded", () => {
       lightboxImg.src = imgRefs[activeSlide].dataset.source;
     }
   };
-
-  function moveLeft(event) {
+  const moveLeft = (event) => {
     if (event.key === "ArrowRight") {
       activeSlide++;
       if (activeSlide > imgRefs.length - 1) {
@@ -67,34 +64,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
       lightboxImg.src = imgRefs[activeSlide].dataset.source;
     }
-  }
-  // const Nextimg = (event) => {
-  //   console.log(event.key);
-  //   console.log(event.target.parentNode.parentNode.nextElementSibling);
-
-  //   switch (event.keyCode) {
-  //     case 39:
-  //       if (myTarget.parentNode.parentNode.nextElementSibling) {
-  //         let nextImage =
-  //           myTarget.parentNode.parentNode.nextElementSibling.firstElementChild
-  //             .firstElementChild;
-
-  //         lightboxImg.setAttribute("src", nextImage.dataset.source);
-  //         myTarget = nextImage;
-  //       }
-  //       break;
-  //     case 37:
-  //       if (myTarget.parentNode.parentNode.previousElementSibling) {
-  //         let prevImage =
-  //           myTarget.parentNode.parentNode.previousElementSibling
-  //             .firstElementChild.firstElementChild;
-
-  //         lightboxImg.setAttribute("src", prevImage.dataset.source);
-  //         myTarget = prevImage;
-  //       }
-  //     case 27:
-  //       EcsModal();
-  //       break;
+  };
+  // const move = ({ key }) => {
+  //   const activeSlideOld = activeSlide;
+  //   if (key === "ArrowRight") {
+  //     activeSlide++;
+  //   } else if (key === "ArrowLeft") {
+  //     activeSlide--;
+  //   }
+  //   if (activeSlide !== activeSlideOld) {
+  //     activeSlide = activeSlide % imgRefs.length;
+  //     lightboxImg.src = imgRefs[activeSlide].dataset.source;
   //   }
   // };
 
@@ -103,13 +83,11 @@ document.addEventListener("DOMContentLoaded", () => {
     lightboxRef.classList.remove("is-open");
     lightboxOverlay.classList.remove("is-open");
     document.removeEventListener("keydown", EcsModal);
-    // document.removeEventListener("keydown", Nextimg);
   };
 
   galleryRef.addEventListener("click", openModal);
   buttonRef.addEventListener("click", closeModal);
   lightboxOverlay.addEventListener("click", closeModal);
-  // document.removeEventListener("keydown", Nextimg);
   document.removeEventListener("keydown", moveRight);
   document.removeEventListener("keydown", moveLeft);
 });
